@@ -6,4 +6,7 @@
 enum{
     AM_FLOODING=10
 };
+#ifndef AM_NEIGHBOR
+#define AM_NEIGHBOR 11
+#endif
 #endif
