@@ -36,13 +36,17 @@ implementation{
 
    event void Boot.booted(){
       call AMControl.start();
-
       dbg(GENERAL_CHANNEL, "Booted\n");
    }
 
    event void AMControl.startDone(error_t err){
       if(err == SUCCESS){
          dbg(GENERAL_CHANNEL, "Radio On\n");
+         
+         // Start neighbor discovery only after radio is confirmed working
+         call NeighborDiscovery.start();
+         //call Flooding.startFlooding();
+         
       }else{
          //Retry until successful
          call AMControl.start();
@@ -69,7 +73,9 @@ implementation{
       call Sender.send(sendPackage, destination);
    }
 
-   event void CommandHandler.printNeighbors(){}
+   event void CommandHandler.printNeighbors(){
+      call NeighborDiscovery.printNeighbors();
+   }
 
    event void CommandHandler.printRouteTable(){}
 
